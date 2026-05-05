@@ -228,6 +228,178 @@ module alu_design
 							end
 					endcase
 				end
+				else begin
+					case(CMD)
+						0:
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= OPA & OPB;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						1:
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= ~(OPA & OPB);
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						2:
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= OPA | OPB;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						3:
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= ~(OPA | OPB);
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						4:
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= OPA ^ OPB;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						5:
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= ~(OPA ^ OPB);
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						6:
+							begin
+								if(INP_VALID[1] == 1'b1) begin
+									RES <= ~OPA;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						7:
+							begin
+								if(INP_VALID[0] == 1'b1) begin
+									RES <= ~OPB;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						8:
+							begin
+								if(INP_VALID[0] == 1'b1) begin
+									RES <= OPA >> 1;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						9:
+							begin
+								if(INP_VALID[0] == 1'b1) begin
+									RES <= OPA << 1;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						10:
+							begin
+								if(INP_VALID[0] == 1'b1) begin
+									RES <= OPB >> 1;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						11:
+							begin
+								if(INP_VALID[0] == 1'b1) begin
+									RES <= OPB << 1;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+					endcase
+				end
 			end
 		end
 	end	
