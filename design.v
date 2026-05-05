@@ -170,6 +170,62 @@ module alu_design
 									ERR <= 1'b1;
 								end
 							end
+						9://increment A and B by 1 and multiply
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= (OPA + 1) * (OPB + 1);
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;
+								end
+							end
+						10://left shift A by 1 and multiply with B
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= (OPA << 1) * OPB;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;
+								end
+							end
+						11://signed addition
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= OPA + OPB;
+									OFLOW <= (OPA[N-1] == OPB[N-1])? (OPA[N-1] != RES[N-1]): 1'b0;
+									COUT <= (~(OPA[N-1] & OPB[N-1]) != RES[N-1]);
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;
+								end
+							end
+						12://signed subtraction
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= OPA - OPB;
+									OFLOW <= (OPA[N-1] == OPB[N-1])? (OPA[N-1] != RES[N-1]): 1'b0;
+									COUT <= ~(OPA < OPB);
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;
+								end
+							end
 					endcase
 				end
 			end
