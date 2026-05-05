@@ -102,7 +102,7 @@ module alu_design
 							end
 						4://increment A
 							begin
-								if(INP_VALID == 2'b1x) begin
+								if(INP_VALID[1] == 1'b1) begin
 									RES <= OPA + 1;
 									OFLOW <= 0;
 									COUT <= RES[N];
@@ -116,7 +116,7 @@ module alu_design
 							end
 						5://decrement A
 							begin
-								if(INP_VALID == 2'b1x) begin
+								if(INP_VALID[1] == 1'b1) begin
 									RES <= OPA - 1;
 									OFLOW <= 0;
 									COUT <= ~(OPA == 0);
@@ -130,7 +130,7 @@ module alu_design
 							end
 						6://increment B
 							begin
-								if(INP_VALID == 2'b1x) begin
+								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPB + 1;
 									OFLOW <= 0;
 									COUT <= RES[N];
@@ -144,10 +144,24 @@ module alu_design
 							end
 						7://decrement B
 							begin
-								if(INP_VALID == 2'b1x) begin
+								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPB - 1;
 									OFLOW <= 0;
 									COUT <= ~(OPB == 0);
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;
+								end
+							end
+						8://compare A and B
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= 0;
+									OFLOW <= 0;
+									COUT <= 0;
 									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
 									ERR <= 0;
 								end
