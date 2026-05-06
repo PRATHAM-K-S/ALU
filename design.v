@@ -104,8 +104,9 @@ module alu_design
 							begin
 								if(INP_VALID[1] == 1'b1) begin
 									RES <= OPA + 1;
+									RES[N] <= 1'b0;
 									OFLOW <= 0;
-									COUT <= RES[N];
+									COUT <= 0;
 									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
 									ERR <= 0;
 								end
@@ -119,7 +120,7 @@ module alu_design
 								if(INP_VALID[1] == 1'b1) begin
 									RES <= OPA - 1;
 									OFLOW <= 0;
-									COUT <= ~(OPA == 0);
+									COUT <= 0;
 									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
 									ERR <= 0;
 								end
@@ -132,8 +133,9 @@ module alu_design
 							begin
 								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPB + 1;
+									RES[N] <= 1'b1;
 									OFLOW <= 0;
-									COUT <= RES[N];
+									COUT <= 0;
 									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
 									ERR <= 0;
 								end
@@ -147,7 +149,7 @@ module alu_design
 								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPB - 1;
 									OFLOW <= 0;
-									COUT <= ~(OPB == 0);
+									COUT <= 0;
 									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
 									ERR <= 0;
 								end
@@ -230,7 +232,7 @@ module alu_design
 				end
 				else begin
 					case(CMD)
-						0:
+						0://and
 							begin
 								if(INP_VALID == 2'b11) begin
 									RES <= OPA & OPB;
@@ -244,7 +246,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						1:
+						1://nand
 							begin
 								if(INP_VALID == 2'b11) begin
 									RES <= ~(OPA & OPB);
@@ -258,7 +260,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						2:
+						2://or
 							begin
 								if(INP_VALID == 2'b11) begin
 									RES <= OPA | OPB;
@@ -272,7 +274,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						3:
+						3://nor
 							begin
 								if(INP_VALID == 2'b11) begin
 									RES <= ~(OPA | OPB);
@@ -286,7 +288,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						4:
+						4://xor
 							begin
 								if(INP_VALID == 2'b11) begin
 									RES <= OPA ^ OPB;
@@ -300,7 +302,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						5:
+						5://xnor
 							begin
 								if(INP_VALID == 2'b11) begin
 									RES <= ~(OPA ^ OPB);
@@ -314,7 +316,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						6:
+						6://not A
 							begin
 								if(INP_VALID[1] == 1'b1) begin
 									RES <= ~OPA;
@@ -328,7 +330,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						7:
+						7://not B
 							begin
 								if(INP_VALID[0] == 1'b1) begin
 									RES <= ~OPB;
@@ -342,7 +344,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						8:
+						8://right shift A by 1
 							begin
 								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPA >> 1;
@@ -356,7 +358,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						9:
+						9://left shift A by 1
 							begin
 								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPA << 1;
@@ -370,7 +372,7 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						10:
+						10://right shift B by 1
 							begin
 								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPB >> 1;
@@ -384,10 +386,24 @@ module alu_design
 									ERR <= 1'b1;	
 								end
 							end
-						11:
+						11://left shift B by 1
 							begin
 								if(INP_VALID[0] == 1'b1) begin
 									RES <= OPB << 1;
+									OFLOW <= 0;
+									COUT <= 0;
+									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
+									ERR <= 0;
+								end
+								else begin
+									{RES,G,L,E,OFLOW,COUT} <= 0;
+									ERR <= 1'b1;	
+								end
+							end
+						12://roll A B
+							begin
+								if(INP_VALID == 2'b11) begin
+									RES <= {OPA[OPB[(N/2)-2:0]:0],(OPA >> OPB[(N/2)-2:0])};
 									OFLOW <= 0;
 									COUT <= 0;
 									{G,L,E} <= (OPA > OPB)? 3'b100: ((OPA < OPB)? 3'b010: 3'b001);
