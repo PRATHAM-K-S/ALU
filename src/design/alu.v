@@ -1,4 +1,4 @@
-module alu_design
+module alu
 	#(
 		parameter N = 4,
 		parameter CMD_N = 1
