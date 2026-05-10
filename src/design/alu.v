@@ -1,7 +1,7 @@
 module alu
 	#(
 		parameter N = 4,
-		parameter CMD_N = 1
+		parameter CMD_N = 4
 	)
 	(
 		input wire [N-1:0] OPA,
@@ -67,7 +67,7 @@ module alu
 				cout <= cout;
 				g <= g;
 				l <= l;
-				e <= l;
+				e <= e;
 				err <= err;
 			end
 		end
@@ -86,7 +86,7 @@ module alu
 		else begin
 			if(CE) begin
 				{delay_res, delay_oflow, delay_cout, delay_g, delay_l, delay_e, delay_err} <= 0;
-				if(MODE == 0) begin	
+				if(MODE == 1) begin	
 					case(CMD)
 						0://unsigned addition
 							begin
@@ -300,6 +300,7 @@ module alu
 		COUT = cout;
 		G = g;
 		L = l;
+		E = e;
 		ERR = err;
 	end
 
