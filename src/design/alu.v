@@ -22,6 +22,8 @@ module alu
 		output reg ERR
 	);
 	
+	localparam clog_n = $clog2(N);
+	
 	reg opa;
 	reg opb;
 	reg [(N+N)-1:0] res;
@@ -232,7 +234,7 @@ module alu
 							end
 						6://not A operation
 							begin
-								if(INP_VALID[1] == 1'b1) begin
+								if(INP_VALID[0] == 1'b1) begin
 									delay_res <= ~OPA;
 								end
 								else begin
@@ -241,7 +243,7 @@ module alu
 							end
 						7://not B operation
 							begin
-								if(INP_VALID[0] == 1'b1) begin
+								if(INP_VALID[1] == 1'b1) begin
 									delay_res <= ~OPB;
 								end
 								else begin
@@ -250,7 +252,7 @@ module alu
 							end
 						8://shift right A by 1
 							begin
-								if(INP_VALID[1] == 1'b1) begin
+								if(INP_VALID[0] == 1'b1) begin
 									delay_res <= OPA >> 1;
 								end
 								else begin
@@ -259,7 +261,7 @@ module alu
 							end
 						9://shift left A by 1
 							begin
-								if(INP_VALID[1] == 1'b1) begin
+								if(INP_VALID[0] == 1'b1) begin
 									delay_res <= OPA << 1;
 								end
 								else begin
@@ -268,7 +270,7 @@ module alu
 							end
 						10://shift right B by 1
 							begin
-								if(INP_VALID[0] == 1'b1) begin
+								if(INP_VALID[1] == 1'b1) begin
 									delay_res <= OPB >> 1;
 								end
 								else begin
@@ -277,11 +279,35 @@ module alu
 							end
 						11://shift left B by 1
 							begin
-								if(INP_VALID[0] == 1'b1) begin
+								if(INP_VALID[1] == 1'b1) begin
 									delay_res <= OPB << 1;
 								end
 								else begin
 									delay_err <= 1'b1;
+								end
+							end
+						12://rotate left a b
+							begin
+								if(INP_VALID == 2'b11) begin
+									delay_res <= (OPA << OPB[clog_n-1:0]) | (OPA >> (N - OPB[clog_n-1:0]));
+									if(|OPB[N-1:clog_n] == 1'b1)begin
+										delay_err <= 1;
+									end
+								end
+								else begin
+									delay_err <= 1;
+								end
+							end
+						13://rotate right a b
+							begin
+								if(INP_VALID == 2'b11) begin
+									delay_res <= (OPA >> OPB[clog_n-1:0]) | (OPA << (N - OPB[clog_n-1:0]));
+									if(|OPB[N-1:clog_n] == 1'b1)begin
+										delay_err <= 1;
+									end
+								end
+								else begin
+									delay_err <= 1;
 								end
 							end
 						default: delay_err <= 1'b1;
@@ -289,6 +315,13 @@ module alu
 				end
 			end
 			else begin
+				delay_res <= delay_res;
+				delay_oflow <= delay_oflow;
+				delay_cout <= delay_cout;
+				delay_g <= delay_g;
+				delay_l <= delay_l;
+				delay_e <= delay_e;
+				delay_err <= delay_err;
 			end
 		end
 	end

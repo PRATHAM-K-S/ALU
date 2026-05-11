@@ -4,3 +4,6 @@ simv.daidir/
 ucli.key
 temp.v
 .daidir/
+simv.vdb/
+coverage_report/
+cm.log
