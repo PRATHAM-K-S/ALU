@@ -35,7 +35,7 @@ module alu_tb;
 	wire ERR_ref;
 
 	//dut decleration
-	alu
+	/*alu
 	#(
 		.N(N),
 		.CMD_N(CMD_N)
@@ -57,9 +57,13 @@ module alu_tb;
 		.L(L_dut),
 		.E(E_dut),
 		.ERR(ERR_dut)
-	);
+	);*/
 
-	/*ALU dut (
+	ALU
+	#(
+		.IN_SIZE(CMD_N)
+	)
+	dut (
 		.OPA(OPA),
 		.OPB(OPB),
 		.CIN(CIN),
@@ -76,7 +80,7 @@ module alu_tb;
 		.L(L_dut),
 		.E(E_dut),
 		.ERR(ERR_dut)
-	);*/
+	);
 
 	//reference module decleration
 	alu_ref ref(
@@ -182,18 +186,18 @@ module alu_tb;
 			apply_test(4'b0010,4'b0000,1'b1,1'b1,1'b1,2'b11,4'b0011,"sub_cin_valid");
 			apply_test(4'b0010,4'b0000,1'b1,1'b1,1'b1,2'b01,4'b0011,"sub_cin_invalid");
 			apply_test(4'b0000,4'b0000,1'b1,1'b1,1'b1,2'b11,4'b0011,"sub_cin_min");
-			apply_test(4'b0001,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b0100,"inc_a_valid");
+			apply_test(4'b0001,4'b0000,1'b0,1'b1,1'b1,2'b01,4'b0100,"inc_a_valid");
 			apply_test(4'b0001,4'b0000,1'b0,1'b1,1'b1,2'b10,4'b0100,"inc_a_invalid");
-			apply_test(4'b1111,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b0100,"inc_a_max");
-			apply_test(4'b0001,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b0101,"dec_a_valid");
+			apply_test(4'b1111,4'b0000,1'b0,1'b1,1'b1,2'b01,4'b0100,"inc_a_max");
+			apply_test(4'b0001,4'b0000,1'b0,1'b1,1'b1,2'b01,4'b0101,"dec_a_valid");
 			apply_test(4'b0001,4'b0000,1'b0,1'b1,1'b1,2'b10,4'b0101,"dec_a_invalid");
-			apply_test(4'b0000,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b0101,"dec_a_min");
-			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b11,4'b0110,"inc_b_valid");
+			apply_test(4'b0000,4'b0000,1'b0,1'b1,1'b1,2'b01,4'b0101,"dec_a_min");
+			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b10,4'b0110,"inc_b_valid");
 			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b01,4'b0110,"inc_b_invalid");
-			apply_test(4'b0000,4'b1111,1'b0,1'b1,1'b1,2'b11,4'b0110,"inc_b_max");
-			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b11,4'b0111,"dec_b_valid");
+			apply_test(4'b0000,4'b1111,1'b0,1'b1,1'b1,2'b10,4'b0110,"inc_b_max");
+			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b10,4'b0111,"dec_b_valid");
 			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b01,4'b0111,"dec_b_invalid");
-			apply_test(4'b0000,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b0111,"dec_b_min");
+			apply_test(4'b0000,4'b0000,1'b0,1'b1,1'b1,2'b10,4'b0111,"dec_b_min");
 			apply_test(4'b0001,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b1000,"cmp_valid_greater");
 			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b11,4'b1000,"cmp_valid_less");
 			apply_test(4'b0000,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b1000,"cmp_valid_equal");

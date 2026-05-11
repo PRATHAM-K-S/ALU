@@ -2,8 +2,7 @@ csrc/
 simv
 simv.daidir/
 ucli.key
-temp.v
 .daidir/
 simv.vdb/
-coverage_report/
+alu_coverage_report/
 cm.log
