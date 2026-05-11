@@ -148,6 +148,7 @@ module alu_tb;
 			driver(opa,opb,cin,ce,mode,inp_valid,cmd);
 			@(posedge CLK);
 			@(posedge CLK);
+			@(posedge CLK);
 			monitor();
 			scoreboard(test_name);
 		end
@@ -197,6 +198,16 @@ module alu_tb;
 			apply_test(4'b0000,4'b0001,1'b0,1'b1,1'b1,2'b11,4'b1000,"cmp_valid_less");
 			apply_test(4'b0000,4'b0000,1'b0,1'b1,1'b1,2'b11,4'b1000,"cmp_valid_equal");
 			apply_test(4'b0000,4'b0000,1'b0,1'b1,1'b1,2'b01,4'b1000,"cmp_invalid");
+			apply_test(4'b0001,4'b0010,1'b0,1'b1,1'b1,2'b11,4'b1001,"incr_a_mul_b_valid");
+			apply_test(4'b0001,4'b0010,1'b0,1'b1,1'b1,2'b10,4'b1001,"incr_a_mul_b_invalid");
+			apply_test(4'b0001,4'b0010,1'b0,1'b1,1'b1,2'b11,4'b1010,"l_shift_a_mul_b_valid");
+			apply_test(4'b0001,4'b0010,1'b0,1'b1,1'b1,2'b10,4'b1010,"l_shift_a_mul_b_invalid");
+			apply_test(4'b0001,4'b1010,1'b0,1'b1,1'b1,2'b11,4'b1011,"signed_addition_valid");
+			apply_test(4'b0001,4'b1010,1'b0,1'b1,1'b1,2'b10,4'b1011,"signed_addition_invalid");
+			apply_test(4'b0001,4'b0010,1'b0,1'b1,1'b1,2'b11,4'b1011,"signed_addition_overflow");
+			apply_test(4'b0001,4'b1010,1'b0,1'b1,1'b1,2'b11,4'b1100,"signed_subtraction_valid");
+			apply_test(4'b0001,4'b1010,1'b0,1'b1,1'b1,2'b10,4'b1100,"signed_subtraction_valid");
+			apply_test(4'b1001,4'b1010,1'b0,1'b1,1'b1,2'b11,4'b1100,"signed_subtraction_overflow");
 		end
 	endtask
 

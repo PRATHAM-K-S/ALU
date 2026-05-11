@@ -43,6 +43,24 @@ module alu
 	reg delay_e;
 	reg delay_err;
 
+	//multiply operations variables
+	reg count;
+	reg [N-1:0] temp_a;
+	reg [N-1:0] temp_b;
+
+	always @(posedge CLK or posedge RST) begin
+		if(RST) begin
+			count <= 0;
+			temp_a <= 0;
+			temp_b <= 0;
+		end
+		else if(CMD == 9 || CMD == 10) begin
+			count <= count + 1;
+		end
+		else
+			count <= 0;
+	end
+
 	always @(posedge CLK or posedge RST) begin
 		if(RST) begin
 			res <= 0;
@@ -168,6 +186,52 @@ module alu
 							begin
 								if(INP_VALID == 2'b11) begin
 									{delay_g, delay_l, delay_e} <= {(OPA > OPB), (OPA < OPB), (OPA == OPB)};
+								end
+								else begin
+									delay_err <= 1'b1;
+								end
+							end
+						9://incr A multiply B
+							begin
+								if(INP_VALID == 2'b11) begin
+									if(count == 0) begin
+										delay_res <= 'bx;
+										temp_a <= OPA;
+										temp_b <= OPB;
+									end
+									else begin
+										delay_res <= (temp_a + 1) * temp_b;
+									end
+								end
+							end
+						10://left shift A multiply B
+							begin
+								if(INP_VALID == 2'b11) begin
+									if(count == 0) begin
+										delay_res <= 'bx;
+										temp_a <= OPA;
+										temp_b <= OPB;
+									end
+									else begin
+										delay_res <= (temp_a << 1) * temp_b;
+									end
+								end
+							end
+						11://signed addition
+							begin
+								if(INP_VALID == 2'b11) begin
+									delay_res <= $signed(OPA) + $signed(OPB);
+									delay_oflow <= OPA[N-1] == OPB[N-1];
+								end
+								else begin
+									delay_err <= 1'b1;
+								end
+							end
+						12://signed addition
+							begin
+								if(INP_VALID == 2'b11) begin
+									delay_res <= $signed(OPA) - $signed(OPB);
+									delay_oflow <= OPA[N-1] == OPB[N-1];
 								end
 								else begin
 									delay_err <= 1'b1;
